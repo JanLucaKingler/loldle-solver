@@ -1,28 +1,48 @@
+package data;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-private static final String URL = "jdbc:sqlite:leagueoflegends";
 
-public static Connection connect() {
-    Connection conn = null;
-    try {
-        conn = DriverManager.getConnection(URL);
-        IO.println("Verbindung zur Datenbank hergestellt!");
-    } catch (SQLException e) {
-        IO.println("Verbindungsfehler: " + e.getMessage());
-    }
-    return conn;
-}
+public class Database {
 
-void main() {
-    Connection connection = connect();
-    if (connection != null) {
+    private static final String URL = "jdbc:sqlite:leagueoflegends.db";
+    private static Database instance;
+    private Connection conn;
+
+
+    private Database() throws SQLException {
         try {
-            connection.close();
-            IO.println("Verbindung geschlossen.");
+            conn = DriverManager.getConnection(URL);
+            System.out.println("Verbindung zur Datenbank hergestellt!");
         } catch (SQLException e) {
-            IO.println("Fehler beim Schließen: " + e.getMessage());
+            System.err.println("Verbindungsfehler: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    public static synchronized Database getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new Database();
+        }
+        return instance;
+    }
+
+
+    public Connection getConnection() {
+        return conn;
+    }
+
+
+    public void closeConnection() {
+        if (conn != null) {
+            try {
+                conn.close();
+                System.out.println("Verbindung zur Datenbank geschlossen.");
+            } catch (SQLException e) {
+                System.err.println("Fehler beim Schließen: " + e.getMessage());
+            }
         }
     }
 }
