@@ -5,10 +5,9 @@ import java.awt.*;
 
 public class ControlPanel extends JPanel {
 
-    private JTextField roleField;
-    private JTextField regionField;
-    private JTextField genderField;
-    private JTextArea resultArea;
+    private final JTextField roleField;
+    private final JTextField regionField;
+    private final JTextField genderField;
 
     public ControlPanel() {
 
@@ -34,7 +33,7 @@ public class ControlPanel extends JPanel {
 
         add(inputPanel, BorderLayout.NORTH);
 
-        resultArea = new JTextArea(10, 30);
+        JTextArea resultArea = new JTextArea(10, 30);
         resultArea.setEditable(false);
         add(new JScrollPane(resultArea), BorderLayout.CENTER);
 
