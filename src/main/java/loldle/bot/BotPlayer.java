@@ -1,4 +1,4 @@
-package bot;
+package loldle.bot;
 
 public class BotPlayer {
 }

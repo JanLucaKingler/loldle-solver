@@ -1,4 +1,4 @@
-package gui;
+package loldle.gui;
 
 public class GamePanel {
 }

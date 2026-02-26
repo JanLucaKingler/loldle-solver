@@ -1,8 +1,11 @@
-package gui;
+package loldle.gui;
+
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.swing.*;
 import java.awt.*;
 
+@RestController
 public class ControlPanel extends JPanel {
 
     private final JTextField roleField;
