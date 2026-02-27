@@ -1,7 +1,14 @@
 package loldle.data;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "champions")
 public class Champion {
 
+   @Id
     private int id;
     private String name;
     private String gender;
@@ -24,6 +31,9 @@ public class Champion {
         this.rangeType = rangeType;
         this.region = region;
         this.releaseYear = releaseYear;
+    }
+
+    public Champion() {
     }
 
     public int getId() {
