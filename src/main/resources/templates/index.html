@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>LoLdle Solver</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        .input-section {
+            margin: 20px;
+        }
+
+        input, select, button {
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #444;
+            color: white;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #444;
+        }
+
+        .green { background-color: #2ecc71; }
+        .yellow { background-color: #f1c40f; }
+        .red { background-color: #e74c3c; }
+
+        .color-select {
+            width: 90px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>LOLdle Solver</h1>
+
+<div class="input-section">
+    <input type="text" id="champName" placeholder="Champion Name">
+
+    <select id="genderColor" class="color-select">
+        <option value="">Gender</option>
+        <option value="green">🟩</option>
+        <option value="yellow">🟨</option>
+        <option value="red">🟥</option>
+    </select>
+
+    <select id="positionColor" class="color-select">
+        <option value="">Position</option>
+        <option value="green">🟩</option>
+        <option value="yellow">🟨</option>
+        <option value="red">🟥</option>
+    </select>
+
+    <select id="speciesColor" class="color-select">
+        <option value="">Species</option>
+        <option value="green">🟩</option>
+        <option value="yellow">🟨</option>
+        <option value="red">🟥</option>
+    </select>
+
+    <select id="resourceColor" class="color-select">
+        <option value="">Resource</option>
+        <option value="green">🟩</option>
+        <option value="yellow">🟨</option>
+        <option value="red">🟥</option>
+    </select>
+
+    <select id="rangeColor" class="color-select">
+        <option value="">Range</option>
+        <option value="green">🟩</option>
+        <option value="yellow">🟨</option>
+        <option value="red">🟥</option>
+    </select>
+
+    <select id="regionColor" class="color-select">
+        <option value="">Region</option>
+        <option value="green">🟩</option>
+        <option value="yellow">🟨</option>
+        <option value="red">🟥</option>
+    </select>
+
+    <select id="yearColor" class="color-select">
+        <option value="">Year</option>
+        <option value="green">🟩</option>
+        <option value="yellow">🟨</option>
+        <option value="red">🟥</option>
+    </select>
+
+    <br>
+    <button onclick="addGuess()">Add Guess</button>
+</div>
+
+<table id="guessTable">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Position</th>
+        <th>Species</th>
+        <th>Resource</th>
+        <th>Range</th>
+        <th>Region</th>
+        <th>Year</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+    function addGuess() {
+        const name = document.getElementById("champName").value;
+        if (!name) return;
+
+        const table = document.getElementById("guessTable").getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+
+        addCell(newRow, name, "");
+        addCell(newRow, "", document.getElementById("genderColor").value);
+        addCell(newRow, "", document.getElementById("positionColor").value);
+        addCell(newRow, "", document.getElementById("speciesColor").value);
+        addCell(newRow, "", document.getElementById("resourceColor").value);
+        addCell(newRow, "", document.getElementById("rangeColor").value);
+        addCell(newRow, "", document.getElementById("regionColor").value);
+        addCell(newRow, "", document.getElementById("yearColor").value);
+
+        document.getElementById("champName").value = "";
+    }
+
+    function addCell(row, text, colorClass) {
+        const cell = row.insertCell();
+        cell.innerText = text;
+        if (colorClass) {
+            cell.classList.add(colorClass);
+        }
+    }
+</script>
+
+</body>
+</html>
