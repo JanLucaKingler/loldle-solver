@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit moduleName="loldle-solver" name="loldle-solver" framework="JPA" ormUnit="loldle-solver:loldle-solver" defaultDataSourceId="397520b9-1338-4c94-ad08-400aebe4defb" />
+    </persistence-units>
+  </component>
+</project>
