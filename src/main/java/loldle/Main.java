@@ -1,6 +1,5 @@
 package loldle;
 
-import loldle.data.Champion;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

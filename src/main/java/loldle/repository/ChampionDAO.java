@@ -1,8 +1,9 @@
-package loldle.data;
+package loldle.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import loldle.model.Champion;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

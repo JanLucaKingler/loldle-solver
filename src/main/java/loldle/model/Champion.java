@@ -1,4 +1,4 @@
-package loldle.data;
+package loldle.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
