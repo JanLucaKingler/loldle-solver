@@ -30,8 +30,13 @@ public class ChampionDAO {
         return result.isEmpty() ? null : result.get(0);
     }
 
-
     public void delete(Champion champion) {
         entityManager.remove(entityManager.contains(champion) ? champion : entityManager.merge(champion));
+    }
+
+    public List<String> findAllNames() {
+        return entityManager.createQuery(
+                        "SELECT c.name FROM Champion c", String.class)
+                .getResultList();
     }
 }

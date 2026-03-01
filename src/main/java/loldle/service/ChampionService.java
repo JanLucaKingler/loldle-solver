@@ -4,6 +4,8 @@ import loldle.model.Champion;
 import loldle.repository.ChampionDAO;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ChampionService {
 
@@ -17,7 +19,7 @@ public class ChampionService {
         return championDAO.findByName(name);
     }
 
-    public Champion getDailyChampion() {
-        return championDAO.findAll().get(0);
+    public List<Champion> getAllChampions() {
+        return championDAO.findAll();
     }
 }
