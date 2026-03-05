@@ -6,6 +6,7 @@ const FIELD_LABELS = ['Gender', 'Position', 'Species', 'Resource', 'Range', 'Reg
 let currentChamp = null;
 let selectedColors = {};
 let allChampNames = [];
+const usedChampNames = new Set();
 
 async function loadAllNames() {
     try {
@@ -21,12 +22,11 @@ loadAllNames();
 document.getElementById('champName').addEventListener('input', function () {
     const val = this.value.toLowerCase();
     const box = document.getElementById('suggestions');
-    if (!val || val.length < 2) {
-        box.innerHTML = '';
-        return;
-    }
+    if (!val || val.length < 2) { box.innerHTML = ''; return; }
 
-    const matches = allChampNames.filter(n => n.toLowerCase().includes(val)).slice(0, 8);
+    const matches = allChampNames
+        .filter(n => n.toLowerCase().includes(val) && !usedChampNames.has(n.toLowerCase()))
+        .slice(0, 8);
     box.innerHTML = matches.map(n =>
         `<div class="suggestion-item" onclick="selectSuggestion('${n.replace(/'/g, "\\'")}')"> ${n}</div>`
     ).join('');
@@ -49,8 +49,10 @@ async function fetchChampion() {
     const errEl = document.getElementById('errorMsg');
     errEl.textContent = '';
 
-    if (!name) {
-        errEl.textContent = 'Bitte einen Champion-Namen eingeben.';
+    if (!name) { errEl.textContent = 'Bitte einen Champion-Namen eingeben.'; return; }
+
+    if (usedChampNames.has(name.toLowerCase())) {
+        errEl.textContent = `"${name}" wurde bereits verwendet.`;
         return;
     }
 
@@ -132,6 +134,7 @@ function addGuess() {
         addCell(row, currentChamp[f] ?? '—', color);
     });
 
+    usedChampNames.add(currentChamp.name.toLowerCase());
     hidePanel();
     document.getElementById('champName').value = '';
     document.getElementById('errorMsg').textContent = '';
