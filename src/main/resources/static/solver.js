@@ -5,14 +5,17 @@ const FIELD_LABELS = ['Gender', 'Position', 'Species', 'Resource', 'Range', 'Reg
 
 let currentChamp = null;
 let selectedColors = {};
+let yearDirection = null;
 let allChampNames = [];
 let allChampions = [];
 const usedChampNames = new Set();
 
 const constraints = {
-    green: {},
+    green:  {},
     yellow: {},
-    red: {}
+    red:    {},
+    yearMin: null,
+    yearMax: null
 };
 
 async function loadAllChampions() {
@@ -20,8 +23,7 @@ async function loadAllChampions() {
         const res = await fetch(`${API_BASE}/champions`);
         allChampions = await res.json();
         allChampNames = allChampions.map(c => c.name);
-    } catch (e) {
-    }
+    } catch (e) {}
 }
 
 loadAllChampions();
@@ -29,10 +31,7 @@ loadAllChampions();
 document.getElementById('champName').addEventListener('input', function () {
     const val = this.value.toLowerCase();
     const box = document.getElementById('suggestions');
-    if (!val || val.length < 2) {
-        box.innerHTML = '';
-        return;
-    }
+    if (!val || val.length < 2) { box.innerHTML = ''; return; }
 
     const matches = allChampNames
         .filter(n => n.toLowerCase().includes(val) && !usedChampNames.has(n.toLowerCase()))
@@ -54,16 +53,12 @@ function selectSuggestion(name) {
     fetchChampion();
 }
 
-
 async function fetchChampion() {
     const name = document.getElementById('champName').value.trim();
     const errEl = document.getElementById('errorMsg');
     errEl.textContent = '';
 
-    if (!name) {
-        errEl.textContent = 'Bitte einen Champion-Namen eingeben.';
-        return;
-    }
+    if (!name) { errEl.textContent = 'Bitte einen Champion-Namen eingeben.'; return; }
 
     if (usedChampNames.has(name.toLowerCase())) {
         errEl.textContent = `"${name}" wurde bereits verwendet.`;
@@ -92,9 +87,9 @@ async function fetchChampion() {
     }
 }
 
-
 function showChampionPanel(champ) {
     selectedColors = {};
+    yearDirection = null;
     FIELDS.forEach(f => selectedColors[f] = 'none');
 
     document.getElementById('panelTitle').textContent = `— ${champ.name} —`;
@@ -108,14 +103,21 @@ function showChampionPanel(champ) {
     `).join('');
 
     const pickers = document.getElementById('colorPickers');
-    pickers.innerHTML = FIELDS.map((f, i) => `
-        <div class="color-row">
+    pickers.innerHTML = FIELDS.map((f, i) => {
+        const isYear = f === 'releaseYear';
+        return `
+        <div class="color-row" id="row-${f}">
             <label>${FIELD_LABELS[i]}</label>
             <button class="color-btn" onclick="setColor('${f}','green',this)">🟩 Grün</button>
             <button class="color-btn" onclick="setColor('${f}','yellow',this)">🟨 Gelb</button>
             <button class="color-btn" onclick="setColor('${f}','red',this)">🟥 Rot</button>
-        </div>
-    `).join('');
+            ${isYear ? `
+            <span class="year-divider">|</span>
+            <button class="color-btn year-btn" id="btn-higher" onclick="setYearDir('higher',this)">⬆ Höher</button>
+            <button class="color-btn year-btn" id="btn-lower"  onclick="setYearDir('lower',this)">⬇ Niedriger</button>
+            ` : ''}
+        </div>`;
+    }).join('');
 
     document.getElementById('champPanel').style.display = 'block';
 }
@@ -123,16 +125,28 @@ function showChampionPanel(champ) {
 function hidePanel() {
     document.getElementById('champPanel').style.display = 'none';
     currentChamp = null;
+    yearDirection = null;
 }
 
 function setColor(field, color, btn) {
-    btn.closest('.color-row').querySelectorAll('.color-btn').forEach(b => {
+    btn.closest('.color-row').querySelectorAll('.color-btn:not(.year-btn)').forEach(b => {
         b.classList.remove('selected-green', 'selected-yellow', 'selected-red');
     });
     btn.classList.add(`selected-${color}`);
     selectedColors[field] = color;
 }
 
+function setYearDir(dir, btn) {
+    document.querySelectorAll('.year-btn').forEach(b =>
+        b.classList.remove('selected-higher', 'selected-lower')
+    );
+    if (yearDirection === dir) {
+        yearDirection = null;
+    } else {
+        yearDirection = dir;
+        btn.classList.add(`selected-${dir}`);
+    }
+}
 
 function addGuess() {
     if (!currentChamp) return;
@@ -145,7 +159,11 @@ function addGuess() {
     addCell(row, currentChamp.name, '', true);
     FIELDS.forEach(f => {
         const color = selectedColors[f] || 'none';
-        addCell(row, currentChamp[f] ?? '—', color);
+        let displayVal = currentChamp[f] ?? '—';
+        if (f === 'releaseYear' && yearDirection) {
+            displayVal = `${displayVal} ${yearDirection === 'higher' ? '⬆' : '⬇'}`;
+        }
+        addCell(row, displayVal, color);
     });
 
     FIELDS.forEach(f => {
@@ -165,6 +183,17 @@ function addGuess() {
             tokens.forEach(t => {
                 if (!constraints.red[f].includes(t)) constraints.red[f].push(t);
             });
+        }
+
+        if (f === 'releaseYear' && yearDirection) {
+            const year = parseInt(currentChamp.releaseYear);
+            if (yearDirection === 'higher') {
+                constraints.yearMin = constraints.yearMin === null
+                    ? year : Math.max(constraints.yearMin, year);
+            } else {
+                constraints.yearMax = constraints.yearMax === null
+                    ? year : Math.min(constraints.yearMax, year);
+            }
         }
     });
 
@@ -203,6 +232,11 @@ function champMatchesConstraints(champ) {
             if (hasRed) return false;
         }
     }
+
+    const year = parseInt(champ.releaseYear);
+    if (constraints.yearMin !== null && year <= constraints.yearMin) return false;
+    if (constraints.yearMax !== null && year >= constraints.yearMax) return false;
+
     return true;
 }
 

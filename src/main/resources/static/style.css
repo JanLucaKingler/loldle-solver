@@ -280,6 +280,8 @@ td.none { background: rgba(255,255,255,0.03); color: #555; }
     letter-spacing: 2px;
 }
 
+/* ── Possible results section ─────────────────────────────── */
+
 #possibleWrapper {
     max-width: 95%;
     margin: 10px auto 60px;
@@ -317,4 +319,25 @@ td.none { background: rgba(255,255,255,0.03); color: #555; }
     background: rgba(200, 155, 60, 0.06);
     color: var(--gold-light);
     cursor: default;
+}
+
+/* ── Year higher/lower buttons ───────────────────────────── */
+
+.year-divider {
+    color: #333;
+    font-size: 1.1rem;
+    padding: 0 4px;
+    user-select: none;
+}
+
+.year-btn.selected-higher {
+    background: #2980b9;
+    color: white;
+    border-color: #2980b9;
+}
+
+.year-btn.selected-lower {
+    background: #8e44ad;
+    color: white;
+    border-color: #8e44ad;
 }
