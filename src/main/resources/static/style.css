@@ -279,3 +279,42 @@ td.none { background: rgba(255,255,255,0.03); color: #555; }
     font-size: 0.9rem;
     letter-spacing: 2px;
 }
+
+#possibleWrapper {
+    max-width: 95%;
+    margin: 10px auto 60px;
+}
+
+.possible-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.possible-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.possible-count {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: #555;
+    text-transform: uppercase;
+}
+
+#possibleTable tbody td {
+    color: #bbb;
+    font-size: 0.9rem;
+}
+
+#possibleTable tbody tr:hover td {
+    background: rgba(200, 155, 60, 0.06);
+    color: var(--gold-light);
+    cursor: default;
+}

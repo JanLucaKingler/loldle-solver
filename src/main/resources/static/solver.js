@@ -6,23 +6,33 @@ const FIELD_LABELS = ['Gender', 'Position', 'Species', 'Resource', 'Range', 'Reg
 let currentChamp = null;
 let selectedColors = {};
 let allChampNames = [];
+let allChampions = [];
 const usedChampNames = new Set();
 
-async function loadAllNames() {
+const constraints = {
+    green: {},
+    yellow: {},
+    red: {}
+};
+
+async function loadAllChampions() {
     try {
         const res = await fetch(`${API_BASE}/champions`);
-        const data = await res.json();
-        allChampNames = data.map(c => c.name);
+        allChampions = await res.json();
+        allChampNames = allChampions.map(c => c.name);
     } catch (e) {
     }
 }
 
-loadAllNames();
+loadAllChampions();
 
 document.getElementById('champName').addEventListener('input', function () {
     const val = this.value.toLowerCase();
     const box = document.getElementById('suggestions');
-    if (!val || val.length < 2) { box.innerHTML = ''; return; }
+    if (!val || val.length < 2) {
+        box.innerHTML = '';
+        return;
+    }
 
     const matches = allChampNames
         .filter(n => n.toLowerCase().includes(val) && !usedChampNames.has(n.toLowerCase()))
@@ -44,12 +54,16 @@ function selectSuggestion(name) {
     fetchChampion();
 }
 
+
 async function fetchChampion() {
     const name = document.getElementById('champName').value.trim();
     const errEl = document.getElementById('errorMsg');
     errEl.textContent = '';
 
-    if (!name) { errEl.textContent = 'Bitte einen Champion-Namen eingeben.'; return; }
+    if (!name) {
+        errEl.textContent = 'Bitte einen Champion-Namen eingeben.';
+        return;
+    }
 
     if (usedChampNames.has(name.toLowerCase())) {
         errEl.textContent = `"${name}" wurde bereits verwendet.`;
@@ -77,6 +91,7 @@ async function fetchChampion() {
         btn.textContent = 'Laden';
     }
 }
+
 
 function showChampionPanel(champ) {
     selectedColors = {};
@@ -118,34 +133,107 @@ function setColor(field, color, btn) {
     selectedColors[field] = color;
 }
 
+
 function addGuess() {
     if (!currentChamp) return;
 
     const tbody = document.getElementById('guessTable').querySelector('tbody');
-
     const emptyRow = tbody.querySelector('.empty-state');
     if (emptyRow) emptyRow.closest('tr').remove();
 
     const row = tbody.insertRow(0);
-
     addCell(row, currentChamp.name, '', true);
     FIELDS.forEach(f => {
         const color = selectedColors[f] || 'none';
         addCell(row, currentChamp[f] ?? '—', color);
     });
 
+    FIELDS.forEach(f => {
+        const color = selectedColors[f];
+        const rawValue = String(currentChamp[f] ?? '');
+        const tokens = rawValue.split(',').map(t => t.trim()).filter(Boolean);
+
+        if (color === 'green') {
+            constraints.green[f] = rawValue;
+        } else if (color === 'yellow') {
+            if (!constraints.yellow[f]) constraints.yellow[f] = [];
+            tokens.forEach(t => {
+                if (!constraints.yellow[f].includes(t)) constraints.yellow[f].push(t);
+            });
+        } else if (color === 'red') {
+            if (!constraints.red[f]) constraints.red[f] = [];
+            tokens.forEach(t => {
+                if (!constraints.red[f].includes(t)) constraints.red[f].push(t);
+            });
+        }
+    });
+
     usedChampNames.add(currentChamp.name.toLowerCase());
+
     hidePanel();
     document.getElementById('champName').value = '';
     document.getElementById('errorMsg').textContent = '';
+
+    updatePossibleResults();
 }
 
 function addCell(row, text, colorClass, isName = false) {
     const cell = row.insertCell();
     cell.textContent = text;
-    if (isName) {
-        cell.classList.add('name-cell');
-    } else {
-        cell.classList.add(colorClass || 'none');
+    cell.classList.add(isName ? 'name-cell' : (colorClass || 'none'));
+}
+
+function champMatchesConstraints(champ) {
+    for (const f of FIELDS) {
+        const rawValue = String(champ[f] ?? '');
+        const tokens = rawValue.split(',').map(t => t.trim()).filter(Boolean);
+
+        if (constraints.green[f] !== undefined) {
+            if (rawValue !== constraints.green[f]) return false;
+            continue;
+        }
+
+        if (constraints.yellow[f]?.length) {
+            const hasMatch = constraints.yellow[f].some(t => tokens.includes(t));
+            if (!hasMatch) return false;
+        }
+
+        if (constraints.red[f]?.length) {
+            const hasRed = constraints.red[f].some(t => tokens.includes(t));
+            if (hasRed) return false;
+        }
     }
+    return true;
+}
+
+function updatePossibleResults() {
+    const possible = allChampions.filter(c =>
+        !usedChampNames.has(c.name.toLowerCase()) && champMatchesConstraints(c)
+    );
+    renderPossibleTable(possible);
+}
+
+function renderPossibleTable(champions) {
+    document.getElementById('possibleWrapper').style.display = 'block';
+    document.getElementById('possibleCount').textContent =
+        `${champions.length} mögliche${champions.length !== 1 ? ' Champions' : ' Champion'}`;
+
+    const tbody = document.getElementById('possibleTable').querySelector('tbody');
+    tbody.innerHTML = '';
+
+    if (champions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Keine Treffer — überprüfe deine Farbangaben</td></tr>';
+        return;
+    }
+
+    champions.forEach(c => {
+        const row = tbody.insertRow();
+        const nameCell = row.insertCell();
+        nameCell.textContent = c.name;
+        nameCell.classList.add('name-cell');
+        FIELDS.forEach(f => {
+            const cell = row.insertCell();
+            cell.textContent = c[f] ?? '—';
+        });
+    });
 }
