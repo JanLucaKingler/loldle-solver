@@ -1,0 +1,281 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Rajdhani:wght@400;600&display=swap');
+
+:root {
+    --gold: #c89b3c;
+    --gold-light: #f0e6a8;
+    --dark: #0a0a0f;
+    --panel: #12121a;
+    --border: #2a2a3a;
+    --green: #27ae60;
+    --yellow: #f39c12;
+    --red: #c0392b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background-color: var(--dark);
+    background-image:
+            radial-gradient(ellipse at 20% 50%, rgba(200,155,60,0.05) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, rgba(200,155,60,0.04) 0%, transparent 40%);
+    color: #ccc;
+    min-height: 100vh;
+}
+
+h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.4rem;
+    color: var(--gold);
+    text-align: center;
+    padding: 30px 0 10px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 30px rgba(200,155,60,0.4);
+}
+
+.subtitle {
+    text-align: center;
+    color: #555;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+}
+
+.input-section {
+    max-width: 700px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+}
+
+.search-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.search-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+#champName {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#champName:focus { border-color: var(--gold); }
+
+#suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    z-index: 100;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.15s;
+}
+
+.suggestion-item:hover { background: rgba(200,155,60,0.15); color: var(--gold); }
+
+#fetchBtn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #c89b3c, #a07828);
+    border: none;
+    border-radius: 6px;
+    color: #000;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+#fetchBtn:hover { opacity: 0.85; transform: translateY(-1px); }
+#fetchBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#champPanel {
+    display: none;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+#champPanel h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+}
+
+.attr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.attr-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+}
+
+.attr-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.attr-value {
+    font-size: 0.95rem;
+    color: #ddd;
+    font-weight: 600;
+}
+
+.color-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    align-items: center;
+}
+
+.color-row label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #666;
+    width: 80px;
+    flex-shrink: 0;
+}
+
+.color-btn {
+    padding: 6px 14px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+    background: rgba(255,255,255,0.05);
+    color: #888;
+}
+
+.color-btn.selected-green { background: var(--green); color: white; border-color: var(--green); }
+.color-btn.selected-yellow { background: var(--yellow); color: white; border-color: var(--yellow); }
+.color-btn.selected-red { background: var(--red); color: white; border-color: var(--red); }
+.color-btn:hover { opacity: 0.8; }
+
+#addBtn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #27ae60, #1e8449);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 8px;
+}
+
+#addBtn:hover { opacity: 0.85; }
+#addBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+#errorMsg {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    text-align: center;
+    min-height: 20px;
+    margin: 4px 0;
+}
+
+.table-wrapper {
+    max-width: 95%;
+    margin: 0 auto 40px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead tr {
+    background: linear-gradient(135deg, #1a1a25, #12121a);
+}
+
+th {
+    padding: 12px 14px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 12px 14px;
+    text-align: center;
+    border: 1px solid var(--border);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+tbody tr:nth-child(even) td { background: rgba(255,255,255,0.01); }
+
+td.name-cell {
+    text-align: left;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--gold-light);
+    letter-spacing: 1px;
+}
+
+td.green { background: rgba(39,174,96,0.25); color: #2ecc71; }
+td.yellow { background: rgba(243,156,18,0.25); color: #f1c40f; }
+td.red { background: rgba(192,57,43,0.25); color: #e74c3c; }
+td.none { background: rgba(255,255,255,0.03); color: #555; }
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #333;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+}
