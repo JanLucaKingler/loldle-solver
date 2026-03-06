@@ -24,5 +24,11 @@ VALUES (1, 'Aatrox', 'Male', 'Top', 'Darkin', 'Manaless', 'Melee', 'Runeterra, S
        (10, 'Aphelios', 'Male', 'Bottom', 'Human, Spiritualist', 'Mana', 'Ranged', 'Targon', 2019),
        (11, 'Ashe', 'Female', 'Bottom', 'Human, Iceborn', 'Mana', 'Ranged', 'Freljord', 2009),
        (12, 'Aurelion Sol', 'Male', 'Middle', 'Celestial, Dragon', 'Mana', 'Ranged', 'Runeterra, Targon', 2016),
-       (13, 'Aurora', 'Female', 'Middle', 'Vastayan', 'Mana', 'Ranged', 'Freljord', 2024)
+       (13, 'Aurora', 'Female', 'Middle', 'Vastayan', 'Mana', 'Ranged', 'Freljord', 2024),
+       (14, 'Bard', 'Male', 'Support', 'Celestial', 'Mana', 'Ranged', 'Runeterra', 2015),
+       (15, 'BelVeth', 'Female', 'Jungle', 'Void-Being', 'Manaless', 'Melee', 'Void', 2022),
+       (16, 'Blitzcrank', 'Other', 'Support', 'Golem', 'Mana', 'Melee', 'Zaun', 2009),
+       (17, 'Brand', 'Male', 'Support', 'Human, Magically Altered', 'Mana', 'Ranged', 'Freljord, Runeterra', 2011),
+       (18, 'Braum', 'Male', 'Support', 'Human, Iceborn', 'Mana', 'Melee', 'Frejord', 2014),
+       (19, 'Briar', 'Female', 'Jungle', 'Golem', 'Health costs', 'Melee', 'Noxus', 2023)
 ON CONFLICT (id) DO NOTHING;
