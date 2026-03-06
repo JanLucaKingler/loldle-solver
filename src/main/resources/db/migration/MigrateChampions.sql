@@ -30,5 +30,10 @@ VALUES (1, 'Aatrox', 'Male', 'Top', 'Darkin', 'Manaless', 'Melee', 'Runeterra, S
        (16, 'Blitzcrank', 'Other', 'Support', 'Golem', 'Mana', 'Melee', 'Zaun', 2009),
        (17, 'Brand', 'Male', 'Support', 'Human, Magically Altered', 'Mana', 'Ranged', 'Freljord, Runeterra', 2011),
        (18, 'Braum', 'Male', 'Support', 'Human, Iceborn', 'Mana', 'Melee', 'Frejord', 2014),
-       (19, 'Briar', 'Female', 'Jungle', 'Golem', 'Health costs', 'Melee', 'Noxus', 2023)
+       (19, 'Briar', 'Female', 'Jungle', 'Golem', 'Health costs', 'Melee', 'Noxus', 2023),
+       (20, 'Caitlyn', 'Female', 'Bottom', 'Human', 'Mana', 'Ranged', 'Piltover', 2011),
+       (21, 'Camille', 'Female', 'Top', 'Cyborg, Human', 'Mana', 'Melee', 'Piltover', 2016),
+       (22, 'Cassiopea', 'Female', 'Middle, Top', 'Human, Magically Altered', 'Mana', 'Ranged', 'Noxus, Shurima', 2010),
+       (23, 'Chogath', 'Male', 'Top', 'Void-Being', 'Mana', 'Melee', 'Void', 2009),
+       (24, 'Corki', 'Male', 'Bottom', 'Yordle', 'Mana', 'Ranged', 'Bandle City, Piltover', 2009)
 ON CONFLICT (id) DO NOTHING;
