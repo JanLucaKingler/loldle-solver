@@ -1,17 +1,17 @@
-CREATE TABLE IF NOT EXISTS champions
+CREATE TABLE IF NOT EXISTS champion
 (
     id           INTEGER PRIMARY KEY,
     name         VARCHAR(100) NOT NULL,
     gender       VARCHAR(20),
-    role         VARCHAR(50),
+    position     VARCHAR(50),
     species      VARCHAR(100),
     resource     VARCHAR(50),
-    attack_type  VARCHAR(20),
+    range_type  VARCHAR(20),
     region       VARCHAR(100),
     release_year INTEGER
 );
 
-INSERT INTO champions (id, name, gender, role, species, resource, attack_type, region, release_year)
+INSERT INTO champion (id, name, gender, position, species, resource, range_type, region, release_year)
 VALUES (1, 'Aatrox', 'Male', 'Top', 'Darkin', 'Manaless', 'Melee', 'Runeterra, Shurima', 2013),
        (2, 'Ahri', 'Female', 'Middle', 'Vastayan', 'Mana', 'Ranged', 'Ionia', 2011),
        (3, 'Akali', 'Female', 'Middle', 'Human', 'Energy', 'Melee', 'Ionia', 2010),
