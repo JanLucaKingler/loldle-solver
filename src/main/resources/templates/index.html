@@ -21,7 +21,7 @@
         <button id="fetchBtn" onclick="fetchChampion()">Laden</button>
     </div>
 
-    <div id="champPanel">
+    <div id="champPanel" style="display:none;">
         <h3 id="panelTitle">— Champion —</h3>
         <div class="attr-grid" id="attrGrid"></div>
 
@@ -48,7 +48,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr><td colspan="8" class="empty-state">Noch keine Guesses — gib einen Champion ein</td></tr>
+        <tr>
+            <td colspan="8" class="empty-state">Noch keine Guesses — gib einen Champion ein</td>
+        </tr>
         </tbody>
     </table>
 </div>

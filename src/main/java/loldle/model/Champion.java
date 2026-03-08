@@ -36,7 +36,6 @@ public class Champion {
     @Column(name = "release_year")
     private int releaseYear;
 
-
     public Champion() {
     }
 }
